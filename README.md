@@ -1,9 +1,17 @@
-![LitecoinPool Monitor in Menu Bar](screenshot01.png)
-
 # LitecoinPool Monitor for BitBar
 This script plugin provides 'at-a-glance' monitoring of your LitecoinPool workers directly from the MacOS menu bar. It displays up-to-the minute hash rates for your account, as well as rates, averages, and percentage stats for each worker. Optional color-coding makes identifying problems with workers visually simple, and alerts to issues quickly.
 
+## Screenshots
+LitecoinPool Monitor current speed in the MacOS Menu Bar:
+
+![LitecoinPool Monitor in Menu Bar](screenshot01.png)
+
+Drop-down menu showing worker status:
+
 ![LitecoinPool Monitor with drop down menu shown](screenshot02.png)
+
+## Related
+If you prefer to monitor your workers from the Notification Center, check out [https://github.com/jstnryan/litecoinpool-monitor-todayscripts](https://github.com/jstnryan/litecoinpool-monitor-todayscripts)
 
 ## BitBar
 [BitBar](https://getbitbar.com/) is an extensible application which allows the output of shell scripts to be displayed from the MacOS menu bar. [BitBar on GitHub](https://github.com/matryer/bitbar)

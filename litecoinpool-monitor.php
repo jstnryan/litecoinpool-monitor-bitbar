@@ -28,6 +28,8 @@ $menuBarMinAlert = 0;
 //                       DO NOT EDIT BELOW THIS LINE                          //
 ////////////////////////////////////////////////////////////////////////////////
 
+// Copyright 2019 Justin Ryan <jstn@jstnryan.com>
+
 // <bitbar.title>LitecoinPool.org Monitor</bitbar.title>
 // <bitbar.version>v1.0</bitbar.version>
 // <bitbar.author>Justin Ryan</bitbar.author>
@@ -53,15 +55,6 @@ curl_setopt_array($curl, [
 $response = curl_exec($curl);
 curl_close($curl);
 
-/**
- * Error urgency level
- *
- * 0 = no fault (green)
- * 1 = notice (yellow)
- * 2 = warning (organge)
- * 3 = critical (red)
- */
-$fault = 0;
 if ($response === false || empty($response)) {
     echo "Unavailable | color=yellow\n";
     echo "---\n";
@@ -78,6 +71,15 @@ if ($obj === null) {
     die;
 }
 
+/**
+ * Error urgency level
+ *
+ * 0 = no fault (green)
+ * 1 = notice (yellow)
+ * 2 = warning (organge)
+ * 3 = critical (red)
+ */
+$fault = 0;
 $maxCol = [0,0,0,0,0];
 $workers = [];
 if (isset($obj['workers']) && !empty($obj['workers'])) {
