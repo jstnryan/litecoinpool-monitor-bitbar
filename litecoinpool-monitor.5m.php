@@ -101,11 +101,11 @@ if (isset($obj['workers']) && !empty($obj['workers'])) {
         if (strlen($w['ave']) > $maxCol[2]) {
             $maxCol[2] = strlen($w['ave']);
         }
-        $w['stale'] = number_format(round(($worker['stale_shares'] / $worker['valid_shares']) * 100, 2), 2, '.', ',') . '%';
+        $w['stale'] = ($worker['valid_shares'] !== 0) ? number_format(round(($worker['stale_shares'] / $worker['valid_shares']) * 100, 2), 2, '.', ',') . '%' : '0.00%';
         if (strlen($w['stale']) > $maxCol[4]) {
             $maxCol[3] = strlen($w['stale']);
         }
-        $w['invalid'] = number_format(round(($worker['invalid_shares'] / $worker['valid_shares']) * 100, 2), 2, '.', ',') . '%';
+        $w['invalid'] = ($worker['valid_shares'] !== 0) ? number_format(round(($worker['invalid_shares'] / $worker['valid_shares']) * 100, 2), 2, '.', ',') . '%' : '0.00%';
         if (strlen($w['invalid']) > $maxCol[4]) {
             $maxCol[4] = strlen($w['invalid']);
         }
