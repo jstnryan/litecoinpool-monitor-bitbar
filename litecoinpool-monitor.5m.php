@@ -97,6 +97,13 @@ if (isset($obj['workers']) && !empty($obj['workers'])) {
         if (strlen($w['rate']) > $maxCol[1]) {
             $maxCol[1] = strlen($w['rate']);
         }
+        if ($worker['hash_rate'] === 0) {
+            if ($worker['hash_rate_24h'] === 0) {
+                $w['fault'] = setFault(1);
+            } else {
+                $w['fault'] = setFault(3);
+            }
+        }
         $w['ave'] = number_format($worker['hash_rate_24h'], 1, '.', ',') . 'kH/s';
         if (strlen($w['ave']) > $maxCol[2]) {
             $maxCol[2] = strlen($w['ave']);
