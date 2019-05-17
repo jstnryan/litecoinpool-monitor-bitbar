@@ -20,6 +20,9 @@ If you prefer to monitor your workers from the Notification Center, check out [h
 
 ## Setup & Usage
 1. Install [BitBar](https://github.com/matryer/bitbar#get-started)
+   ````
+   brew cask install bitbar
+   ````
 1. Copy the [litecoinpool-monitor.5m.php](litecoinpool-monitor.5m.php) file to your BitBar plugins folder
 1. Edit `litecoinpool-monitor.php` with your favorite text editor; modify the settings shown below to your preference:
    ````php
