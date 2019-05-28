@@ -85,8 +85,20 @@ $workers = [];
 if (isset($obj['workers']) && !empty($obj['workers'])) {
     foreach ($obj['workers'] as $name => $worker) {
         $w['fault'] = setFault(threshold($worker['hash_rate'], $worker['hash_rate_24h']));
-        if (!$worker['connected']) {
-            $w['fault'] = setFault(3);
+        if ($worker['hash_rate_24h'] === 0) {
+            if ($worker['connected']) {
+                //this worker is doing nothing
+                $w['fault'] = setFault(3);
+            } else {
+                //this worker hasn't started yet, or has been abandoned long
+                // enough for average to drop to zero
+                $w['fault'] = 1;
+            }
+        } else {
+            if (!$worker['connected']) {
+                //this worker has become disconnected
+                $w['fault'] = setFault(3);
+            }
         }
 
         $w['name'] = $name;
@@ -97,22 +109,15 @@ if (isset($obj['workers']) && !empty($obj['workers'])) {
         if (strlen($w['rate']) > $maxCol[1]) {
             $maxCol[1] = strlen($w['rate']);
         }
-        if ($worker['hash_rate'] === 0) {
-            if ($worker['hash_rate_24h'] === 0) {
-                $w['fault'] = setFault(1);
-            } else {
-                $w['fault'] = setFault(3);
-            }
-        }
         $w['ave'] = number_format($worker['hash_rate_24h'], 1, '.', ',') . 'kH/s';
         if (strlen($w['ave']) > $maxCol[2]) {
             $maxCol[2] = strlen($w['ave']);
         }
-        $w['stale'] = ($worker['valid_shares'] !== 0) ? number_format(round(($worker['stale_shares'] / $worker['valid_shares']) * 100, 2), 2, '.', ',') . '%' : '0.00%';
+        $w['stale'] = ((int)$worker['valid_shares'] !== 0) ? number_format(round(($worker['stale_shares'] / $worker['valid_shares']) * 100, 2), 2, '.', ',') . '%' : '0.00%';
         if (strlen($w['stale']) > $maxCol[4]) {
             $maxCol[3] = strlen($w['stale']);
         }
-        $w['invalid'] = ($worker['valid_shares'] !== 0) ? number_format(round(($worker['invalid_shares'] / $worker['valid_shares']) * 100, 2), 2, '.', ',') . '%' : '0.00%';
+        $w['invalid'] = ((int)$worker['valid_shares'] !== 0) ? number_format(round(($worker['invalid_shares'] / $worker['valid_shares']) * 100, 2), 2, '.', ',') . '%' : '0.00%';
         if (strlen($w['invalid']) > $maxCol[4]) {
             $maxCol[4] = strlen($w['invalid']);
         }
