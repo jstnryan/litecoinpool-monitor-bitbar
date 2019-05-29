@@ -86,10 +86,7 @@ if (isset($obj['workers']) && !empty($obj['workers'])) {
     foreach ($obj['workers'] as $name => $worker) {
         $w['fault'] = setFault(threshold($worker['hash_rate'], $worker['hash_rate_24h']));
         if ($worker['hash_rate_24h'] === 0) {
-            if ($worker['connected']) {
-                //this worker is doing nothing
-                $w['fault'] = setFault(3);
-            } else {
+            if (!$worker['connected']) {
                 //this worker hasn't started yet, or has been abandoned long
                 // enough for average to drop to zero
                 $w['fault'] = 1;
