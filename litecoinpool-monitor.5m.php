@@ -230,7 +230,7 @@ function threshold($speed, $average) {
 function rateFormat($rate) {
     global $rateMagnitude, $rateMethod;
 
-    $magnitude = call_user_func($rateMethod, floor(log10($rate)) / 3);
+    $magnitude = ($rate == 0) ? 0 : call_user_func($rateMethod, floor(log10($rate)) / 3);
     $adjusted = ($rate * 1000) / (1000 ** $magnitude);
     return number_format($adjusted, 1, '.', ',') . $rateMagnitude[$magnitude];
 }
