@@ -24,6 +24,27 @@ $lowRate = [
 // 0 = show all (green when no alert)
 $menuBarMinAlert = 0;
 
+// Rate denominations, modify to preference; example: 'kH/s'->'k', 'GH/s'->'G'
+$rateMagnitude = [
+    0 => 'H/s',     //10^0
+    1 => 'kH/s',    //10^3  "kilo-"
+    2 => 'MH/s',    //10^6  "mega-"
+    3 => 'GH/s',    //10^9  "giga-"
+    4 => 'TH/s',    //10^12 "tera-"
+    5 => 'PH/s',    //10^15 "peta-"
+    6 => 'EH/s',    //10^18 "exa-"
+    7 => 'ZH/s',    //10^21 "zeta-"
+    8 => 'YH/s',    //10^24 "yotta-"
+];
+// Rate method, favor larger accuracy or shorter (concise) number;
+//  * 'floor' - force the longest, but most accurage number in a lower magnitude
+//  * 'round' - happy medium of options
+//  * 'ceil'  - force shortest, less accurate number in higher magnitude
+//
+//  example: "round" = 34,945.0kH/s, "ceil" = 34.9MH/s
+//           "round" = 989.0kH/s, "floor" = 989,000.0H/s
+$rateMethod = 'ceil'; //[floor, round, ceil]
+
 ////////////////////////////////////////////////////////////////////////////////
 //                       DO NOT EDIT BELOW THIS LINE                          //
 ////////////////////////////////////////////////////////////////////////////////
@@ -102,11 +123,11 @@ if (isset($obj['workers']) && !empty($obj['workers'])) {
         if (strlen($name) > $maxCol[0]) {
             $maxCol[0] = strlen($name);
         }
-        $w['rate'] = number_format($worker['hash_rate'], 1, '.', ',') . 'kH/s';
+        $w['rate'] = rateFormat($worker['hash_rate']);
         if (strlen($w['rate']) > $maxCol[1]) {
             $maxCol[1] = strlen($w['rate']);
         }
-        $w['ave'] = number_format($worker['hash_rate_24h'], 1, '.', ',') . 'kH/s';
+        $w['ave'] = rateFormat($worker['hash_rate_24h']);
         if (strlen($w['ave']) > $maxCol[2]) {
             $maxCol[2] = strlen($w['ave']);
         }
@@ -127,7 +148,7 @@ foreach ($workers as $worker) {
     $workerLines .= ' | font=Courier' . lineColor($worker['fault'], 1, ' ') . "\n";
 }
 
-echo number_format($obj['user']['hash_rate'], 1, '.', ',') . 'kH/s' . lineColor($fault, $menuBarMinAlert) ."\n";
+echo rateFormat($obj['user']['hash_rate']) . lineColor($fault, $menuBarMinAlert) ."\n";
 echo '---' . "\n";
 echo $workerLines;
 echo 'Go to account page | href="https://www.litecoinpool.org/account"' . "\n";
@@ -204,4 +225,12 @@ function threshold($speed, $average) {
         return 2;
     }
     return 3;
+}
+
+function rateFormat($rate) {
+    global $rateMagnitude, $rateMethod;
+
+    $magnitude = call_user_func($rateMethod, floor(log10($rate)) / 3);
+    $adjusted = ($rate * 1000) / (1000 ** $magnitude);
+    return number_format($adjusted, 1, '.', ',') . $rateMagnitude[$magnitude];
 }
