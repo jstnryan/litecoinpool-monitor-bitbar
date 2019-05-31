@@ -148,7 +148,7 @@ if (isset($obj['workers']) && !empty($obj['workers'])) {
 }
 $workerLines = str_pad('Worker', $maxCol[0]) . '  ' . str_pad('Speed', $maxCol[1]) . '  ' . str_pad('Av.Spd', $maxCol[2]) . '  ' . str_pad('Stale', $maxCol[3]) . '  ' . str_pad('Inval', $maxCol[4]) . " | font=Courier\n";
 foreach ($workers as $worker) {
-    $workerLines .= str_pad($worker['name'], $maxCol[0]) . '  ' . str_pad($worker['rate'], $maxCol[1]) . '  ' . str_pad($worker['ave'], $maxCol[2]) . '  ' . str_pad($worker['stale'], $maxCol[3]) . '  ' . str_pad($worker['invalid'], $maxCol[4]);
+    $workerLines .= str_pad($worker['name'], $maxCol[0]) . '  ' . str_pad($worker['rate'], $maxCol[1], ' ', STR_PAD_LEFT) . '  ' . str_pad($worker['ave'], $maxCol[2], ' ', STR_PAD_LEFT) . '  ' . str_pad($worker['stale'], $maxCol[3], ' ', STR_PAD_LEFT) . '  ' . str_pad($worker['invalid'], $maxCol[4], ' ', STR_PAD_LEFT);
     $workerLines .= ' | font=Courier' . lineColor($worker['fault'], 1, ' ') . "\n";
 }
 
